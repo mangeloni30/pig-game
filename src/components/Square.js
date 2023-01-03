@@ -1,25 +1,18 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
+import Player from "./Player";
+import Controls from "./Controls";
+import Dice from "./Dice";
 
 const Wrapper = styled.div`
-  width: 80%;
-  height: 80%;
-  background: linear-gradient(135deg, orange 60%, cyan);
-  position: absolute;
-  border-radius: 10px;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  margin: auto;
+  height: 50%;
 `;
 
 const PlayerWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  div {
+  div.player-wrapper {
     width: 50%;
     height: 100%;
   }
@@ -27,22 +20,84 @@ const PlayerWrapper = styled.div`
 
 const PlayerOneWrapper = styled.div`
   border-radius: 10px 0 0 10px;
-  background: #D8BFD8;
+  background: linear-gradient(177.9deg, rgb(255, 228, 254) 5.3%, rgb(255, 228, 254) 5.3%, rgb(188, 132, 173) 94.7%);
 `;
 
 const PlayerTwoWrapper = styled.div`
   border-radius: 0 10px 10px 0;
-  background: #E0BFB8;
+  background: radial-gradient(circle at 10% 20%, rgb(248, 213, 214) 0%, rgb(243, 242, 229, 60%) 90%);
+`;
+
+const MainWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(106.5deg, rgba(255, 215, 185, 0.91) 23%, rgba(223, 159, 247, 0.8) 93%);
 `;
 
 function Square(){
+  const [isPlayerOneTurn, setIsPlayerOneTurn] = useState(true);
+  const [playerOnePoints, setPlayerOnePoints] = useState(0);
+  const [playerTwoPoints, setPlayerTwoPoints] = useState(0);
+
+  const onPlayerWin = (playerName) => {
+    alert(`${playerName} Won! Congrats!!!`);
+  }
+
+  const onRollDice = useCallback((diceResult) => {
+    const executeStateFunction = isPlayerOneTurn
+      ? setPlayerOnePoints : setPlayerTwoPoints;
+    if (playerOnePoints + diceResult >= 20 || playerTwoPoints + diceResult >= 20) {
+      onPlayerWin(isPlayerOneTurn ? "Player 1" : "Player 2");
+    }
+    if (diceResult === 1) {
+      setIsPlayerOneTurn((prevStatus) => !prevStatus);
+      executeStateFunction(0);
+    } else {
+      executeStateFunction((prevStatus) => prevStatus + diceResult);
+    }
+  }, [isPlayerOneTurn]);
+
+  const onHold = () => {
+    console.log("onHold")
+    setIsPlayerOneTurn((prevStatus) => !prevStatus);
+  };
+
+  const onNewGame = () => {
+    setPlayerOnePoints(0);
+    setPlayerTwoPoints(0);
+    setIsPlayerOneTurn(true);
+  };
+
   return (
-    <Wrapper>
-      <PlayerWrapper>
-        <PlayerOneWrapper />
-        <PlayerTwoWrapper />
-      </PlayerWrapper>
-    </Wrapper>
+    <MainWrapper>
+      <div>
+        <h1>{`Is player ${isPlayerOneTurn ? "One" : "Two"} turn`}</h1>
+        <Controls
+          onHold={onHold}
+          onNewGame={onNewGame}
+          onRollDice={onRollDice}
+        />
+      </div>
+      <Wrapper>
+        <PlayerWrapper>
+          <PlayerOneWrapper className="player-wrapper">
+            <Player
+              name="Player 1"
+              points={playerOnePoints}
+            />
+          </PlayerOneWrapper>
+          <PlayerTwoWrapper className="player-wrapper">
+            <Player
+              name="Player 2"
+              points={playerTwoPoints}
+            />
+          </PlayerTwoWrapper>
+        </PlayerWrapper>
+        <Dice onRollDice={onRollDice} />
+      </Wrapper>
+    </MainWrapper>
   );
 }
 
