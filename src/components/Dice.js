@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { ReactComponent as Pig } from "../svg/pigFace.svg";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -23,6 +24,7 @@ const Wrapper = styled.div`
     box-sizing: border-box;
     padding: 10px;
     position: relative;
+    box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
     
     .dot{
       border-radius: 50%;
@@ -163,6 +165,17 @@ const Wrapper = styled.div`
   }
 `;
 
+const PigWrapper = styled.div`
+    position: absolute;
+    top: 35%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5%;
+    width: 5%;
+    margin: 0 auto;
+`;
+
 function Dice2({ onRollDice }){
   const [diceResult, setDiceResult] = useState();
   const [dotsToShow, setDotsToShow] = useState([]);
@@ -181,23 +194,28 @@ function Dice2({ onRollDice }){
   }, [diceResult]);
 
   return (
-    <Wrapper>
-      <div className="container">
-        <div className={`dice dice${dotsToShow.length}`}>
-          {
-            dotsToShow.map(
-              () => (<div className="dot"></div>)
-            )
-          }
+    <>
+      <PigWrapper>
+        <Pig />
+      </PigWrapper>
+      <Wrapper>
+        <div className="container">
+          <div className={`dice dice${dotsToShow.length}`}>
+            {
+              dotsToShow.map(
+                () => (<div className="dot"></div>)
+              )
+            }
+          </div>
         </div>
-      </div>
-      <button
-        id="roll-button"
-        onClick={rollDice}
-      >
-        Roll Dice
-      </button>
-    </Wrapper>
+        <button
+          id="roll-button"
+          onClick={rollDice}
+        >
+          Roll Dice
+        </button>
+      </Wrapper>
+    </>
   );
 }
 

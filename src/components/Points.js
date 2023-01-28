@@ -11,9 +11,8 @@ function Points({ points }){
   return (
     <>
       <div>
-        Current
         <div>
-          {currentPoints}
+          Points: {currentPoints}
         </div>
       </div>
     </>

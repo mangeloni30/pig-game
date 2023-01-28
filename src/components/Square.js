@@ -15,6 +15,7 @@ const PlayerWrapper = styled.div`
   div.player-wrapper {
     width: 50%;
     height: 100%;
+    box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
   }
 `;
 
@@ -48,7 +49,7 @@ function Square(){
   const onRollDice = useCallback((diceResult) => {
     const executeStateFunction = isPlayerOneTurn
       ? setPlayerOnePoints : setPlayerTwoPoints;
-    if (playerOnePoints + diceResult >= 20 || playerTwoPoints + diceResult >= 20) {
+    if ((playerOnePoints + diceResult) >= 20 || (playerTwoPoints + diceResult) >= 20) {
       onPlayerWin(isPlayerOneTurn ? "Player 1" : "Player 2");
     }
     if (diceResult === 1) {
@@ -57,10 +58,9 @@ function Square(){
     } else {
       executeStateFunction((prevStatus) => prevStatus + diceResult);
     }
-  }, [isPlayerOneTurn]);
+  }, [isPlayerOneTurn, playerOnePoints, playerTwoPoints]);
 
   const onHold = () => {
-    console.log("onHold")
     setIsPlayerOneTurn((prevStatus) => !prevStatus);
   };
 
