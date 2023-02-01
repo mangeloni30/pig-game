@@ -176,7 +176,7 @@ const PigWrapper = styled.div`
     margin: 0 auto;
 `;
 
-function Dice2({ onRollDice }){
+function Dice2({ onRollDice, isThereWInner }){
   const [diceResult, setDiceResult] = useState();
   const [dotsToShow, setDotsToShow] = useState([]);
   function rollDice() {
@@ -211,6 +211,7 @@ function Dice2({ onRollDice }){
         <button
           id="roll-button"
           onClick={rollDice}
+          disabled={isThereWInner}
         >
           Roll Dice
         </button>

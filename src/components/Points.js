@@ -7,7 +7,6 @@ function Points({ points }){
     setCurrentPoints(points);
   }, [points]);
 
-  console.log("currentPoints ", currentPoints);
   return (
     <>
       <div>

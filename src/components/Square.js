@@ -41,16 +41,13 @@ function Square(){
   const [isPlayerOneTurn, setIsPlayerOneTurn] = useState(true);
   const [playerOnePoints, setPlayerOnePoints] = useState(0);
   const [playerTwoPoints, setPlayerTwoPoints] = useState(0);
-
-  const onPlayerWin = (playerName) => {
-    alert(`${playerName} Won! Congrats!!!`);
-  }
+  const [isThereWInner, setIsThereWinner] = useState(false);
 
   const onRollDice = useCallback((diceResult) => {
     const executeStateFunction = isPlayerOneTurn
       ? setPlayerOnePoints : setPlayerTwoPoints;
     if ((playerOnePoints + diceResult) >= 20 || (playerTwoPoints + diceResult) >= 20) {
-      onPlayerWin(isPlayerOneTurn ? "Player 1" : "Player 2");
+      setIsThereWinner(true);
     }
     if (diceResult === 1) {
       setIsPlayerOneTurn((prevStatus) => !prevStatus);
@@ -78,24 +75,31 @@ function Square(){
           onHold={onHold}
           onNewGame={onNewGame}
           onRollDice={onRollDice}
+          isThereWInner={isThereWInner}
         />
       </div>
       <Wrapper>
         <PlayerWrapper>
           <PlayerOneWrapper className="player-wrapper">
             <Player
+              {...(isThereWInner && isPlayerOneTurn && {
+                isTheWinner: true
+              })}
               name="Player 1"
               points={playerOnePoints}
             />
           </PlayerOneWrapper>
           <PlayerTwoWrapper className="player-wrapper">
             <Player
+              {...(isThereWInner && !isPlayerOneTurn && {
+                isTheWinner: true
+              })}
               name="Player 2"
               points={playerTwoPoints}
             />
           </PlayerTwoWrapper>
         </PlayerWrapper>
-        <Dice onRollDice={onRollDice} />
+        <Dice onRollDice={onRollDice} isThereWInner={isThereWInner} />
       </Wrapper>
     </MainWrapper>
   );

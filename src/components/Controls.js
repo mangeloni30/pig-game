@@ -1,9 +1,9 @@
 import React from "react";
 
-function Controls({ onHold, onNewGame }){
+function Controls({ onHold, onNewGame, isThereWInner }){
   return (
     <div>
-      <button onClick={onHold}>
+      <button onClick={onHold} disabled={isThereWInner}>
         Hold
       </button>
       <button onClick={onNewGame}>
